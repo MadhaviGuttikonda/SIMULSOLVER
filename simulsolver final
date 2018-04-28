@@ -1,0 +1,42 @@
+  1 import numpy as np
+  2 import re
+  3 
+  4 def nested_change(item, func):
+  5     if isinstance(item, list):
+  6         return[nested_change(x, func) for x in item]
+  7     return func(item)
+  8 
+  9 def extractingCoefficient(stringOfEqu):
+ 10     listOfEqu = stringOfEqu.split(';')
+ 11     eoc = []
+ 12     eqns = []
+ 13     listOfCoeff = []
+ 14     listOfConst = []
+ 15     for eqn in listOfEqu:
+ 16         eqns.append(re.sub("[^0-9, ^+, ^-]", " ", eqn))
+ 17     print(eqns)
+ 18     #eqn = [eqns for eqn in eqns if len(eqn.strip()) > 0]
+ 19     for eqn in eqns:
+ 20         a = filter(str.strip,eqn.split(" "))
+ 21         #eoc.append(list(filter(str.strip, eqn.split(" "))))
+ 22         eoc.append(list(a))
+ 23     print(eoc)
+ 24 
+ 25     inteoc = nested_change(eoc, int)
+ 26     print(inteoc)
+ 27 
+ 28     for num in inteoc:
+ 29         listOfCoeff.append(num[0:-1])
+ 30 
+ 31     for num in inteoc:
+ 32         listOfConst.append(num[-1:])
+ 33 
+ 34     return (listOfCoeff, listOfConst)
+ 35 
+ 36 def simulsolver(stringOfEqu):
+ 37     A,B = extractingCoefficient(stringOfEqu)
+ 38     X = np.linalg.solve(A,B)
+ 39     return X
+ 40 
+ 41 print(simulsolver('3x+2y=2; 4x+5y=12'))
+
